@@ -467,7 +467,7 @@ body {
    * - side padding: 24px gives 48px total horizontal margin on a 375px screen
    */
   .content {
-    padding: 60vh 24px 40vh;
+    padding: 40vh 24px 40vh;
     font-size: 21px;
     line-height: 2.4em;
     letter-spacing: 0.05em;
@@ -492,7 +492,7 @@ body {
   }
 
   .logo img {
-    height: 24px;
+    height: 28px;
   }
 
   /* Per-logo overrides: scale each proportionally from desktop values.
@@ -576,7 +576,7 @@ body {
    * - side padding: 16px is the platform minimum comfortable margin
    */
   .content {
-    padding: 50vh 16px 40vh;
+    padding: 35vh 16px 40vh;
     font-size: 19px;
     line-height: 2.4em;
     letter-spacing: 0.04em;
@@ -598,7 +598,7 @@ body {
   }
 
   .logo img {
-    height: 22px;
+    height: 26px;
   }
 
   /* Scale per-logo overrides from the 680px values (18px base → 16px base) */
