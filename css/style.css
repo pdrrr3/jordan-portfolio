@@ -498,33 +498,33 @@ body {
 
   /* Per-logo overrides for mobile */
   .logo-msl img        { height: 24px; }
-  .logo-tbwa img       { height: 22px; }
-  .logo-tiktok img     { height: 28px; }
-  .logo-johnst img     { height: 24px; }
-  .logo-wk img         { height: 24px; }
-  .logo-commonwealth img { height: 20px; }
+  .logo-tbwa img       { height: 26px; }
+  .logo-tiktok img     { height: 32px; }
+  .logo-johnst img     { height: 28px; }
+  .logo-wk img         { height: 28px; }
+  .logo-commonwealth img { height: 24px; }
   .logo-hilton img     { height: 22px; }
-  .logo-budlight img   { height: 28px; }
-  .logo-mountaindew img { height: 30px; }
+  .logo-budlight img   { height: 32px; }
+  .logo-mountaindew img { height: 34px; }
   .logo-kfc img        { height: 24px; }
-  .logo-corona img     { height: 28px; }
+  .logo-corona img     { height: 32px; }
   .logo-axe img        { height: 20px; }
   .logo-spotify img    { height: 22px; }
-  .logo-cannes img     { height: 30px; }
+  .logo-cannes img     { height: 34px; }
   .logo-clios img      { height: 22px; }
-  .logo-theoneshow img { height: 30px; }
-  .logo-effie img      { height: 26px; }
-  .logo-adage img      { height: 24px; }
-  .logo-boosiefade img { height: 30px; }
-  .logo-tiff img       { height: 26px; }
-  .logo-redbull img    { height: 26px; }
-  .logo-livenation img { height: 22px; }
-  .logo-eone img       { height: 24px; }
-  .logo-adidas img     { height: 22px; }
+  .logo-theoneshow img { height: 34px; }
+  .logo-effie img      { height: 30px; }
+  .logo-adage img      { height: 28px; }
+  .logo-boosiefade img { height: 34px; }
+  .logo-tiff img       { height: 30px; }
+  .logo-redbull img    { height: 30px; }
+  .logo-livenation img { height: 26px; }
+  .logo-eone img       { height: 28px; }
+  .logo-adidas img     { height: 26px; }
   .logo-ssense img     { height: 20px; }
-  .logo-fader img      { height: 26px; }
-  .logo-vice img       { height: 22px; }
-  .logo-complex img    { height: 22px; }
+  .logo-fader img      { height: 30px; }
+  .logo-vice img       { height: 26px; }
+  .logo-complex img    { height: 26px; }
   .logo-now img        { height: 24px; }
 
   .logo-name {
