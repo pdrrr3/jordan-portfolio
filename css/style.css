@@ -79,7 +79,9 @@ body {
 }
 
 @media (max-width: 680px) {
-  .gradient-top,
+  .gradient-top {
+    height: 140px;
+  }
   .gradient-bottom {
     height: 80px;
   }
@@ -468,7 +470,7 @@ body {
    */
   .content {
     padding: 40vh 24px 40vh;
-    font-size: 21px;
+    font-size: 20px;
     line-height: 2.4em;
     letter-spacing: 0.05em;
     margin: 0 auto;
@@ -498,33 +500,33 @@ body {
 
   /* Per-logo overrides for mobile */
   .logo-msl img        { height: 24px; }
-  .logo-tbwa img       { height: 30px; }
-  .logo-tiktok img     { height: 36px; }
-  .logo-johnst img     { height: 32px; }
-  .logo-wk img         { height: 32px; }
-  .logo-commonwealth img { height: 28px; }
+  .logo-tbwa img       { height: 34px; }
+  .logo-tiktok img     { height: 40px; }
+  .logo-johnst img     { height: 36px; }
+  .logo-wk img         { height: 36px; }
+  .logo-commonwealth img { height: 32px; }
   .logo-hilton img     { height: 22px; }
-  .logo-budlight img   { height: 36px; }
-  .logo-mountaindew img { height: 38px; }
+  .logo-budlight img   { height: 40px; }
+  .logo-mountaindew img { height: 42px; }
   .logo-kfc img        { height: 24px; }
-  .logo-corona img     { height: 36px; }
+  .logo-corona img     { height: 40px; }
   .logo-axe img        { height: 20px; }
-  .logo-spotify img    { height: 18px; }
-  .logo-cannes img     { height: 38px; }
+  .logo-spotify img    { height: 14px; }
+  .logo-cannes img     { height: 42px; }
   .logo-clios img      { height: 22px; }
-  .logo-theoneshow img { height: 38px; }
-  .logo-effie img      { height: 34px; }
-  .logo-adage img      { height: 32px; }
-  .logo-boosiefade img { height: 38px; }
-  .logo-tiff img       { height: 34px; }
-  .logo-redbull img    { height: 34px; }
-  .logo-livenation img { height: 30px; }
-  .logo-eone img       { height: 32px; }
-  .logo-adidas img     { height: 30px; }
+  .logo-theoneshow img { height: 42px; }
+  .logo-effie img      { height: 38px; }
+  .logo-adage img      { height: 36px; }
+  .logo-boosiefade img { height: 42px; }
+  .logo-tiff img       { height: 38px; }
+  .logo-redbull img    { height: 38px; }
+  .logo-livenation img { height: 34px; }
+  .logo-eone img       { height: 36px; }
+  .logo-adidas img     { height: 34px; }
   .logo-ssense img     { height: 20px; }
-  .logo-fader img      { height: 34px; }
-  .logo-vice img       { height: 30px; }
-  .logo-complex img    { height: 30px; }
+  .logo-fader img      { height: 38px; }
+  .logo-vice img       { height: 34px; }
+  .logo-complex img    { height: 34px; }
   .logo-now img        { height: 24px; }
 
   .logo-name {
@@ -572,7 +574,7 @@ body {
    */
   .content {
     padding: 35vh 16px 40vh;
-    font-size: 19px;
+    font-size: 18px;
     line-height: 2.4em;
     letter-spacing: 0.04em;
   }
@@ -609,6 +611,7 @@ body {
   .logo-kfc img        { height: 14px; }
   .logo-corona img     { height: 18px; }
   .logo-axe img        { height: 13px; }
+  .logo-spotify img    { height: 12px; }
   .logo-cannes img     { height: 19px; }
   .logo-clios img      { height: 14px; }
   .logo-theoneshow img { height: 19px; }
