@@ -1,0 +1,688 @@
+/* Font */
+@font-face {
+  font-family: 'Authentic Sans';
+  src: url('../font/AUTHENTIC SANS PRO 220106/woff/AUTHENTICSans-90.woff2') format('woff2'),
+       url('../font/AUTHENTIC SANS PRO 220106/woff/AUTHENTICSans-90.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Authentic Sans';
+  src: url('../font/AUTHENTIC SANS PRO 220106/woff/AUTHENTICSans-130.woff2') format('woff2'),
+       url('../font/AUTHENTIC SANS PRO 220106/woff/AUTHENTICSans-130.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Authentic Sans';
+  src: url('../font/AUTHENTIC SANS PRO 220106/woff/AUTHENTICSans-60.woff2') format('woff2'),
+       url('../font/AUTHENTIC SANS PRO 220106/woff/AUTHENTICSans-60.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+::selection {
+  background: #ffeb3b;
+  color: #000;
+}
+
+/* Reset */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Base */
+html {
+  font-size: 16px;
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: 'Authentic Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+/* Navigation */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  background: #000;
+}
+
+/* Gradient overlays */
+.gradient-top,
+.gradient-bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 120px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@media (max-width: 680px) {
+  .gradient-top,
+  .gradient-bottom {
+    height: 80px;
+  }
+}
+
+.gradient-top {
+  top: 40px;
+  background: linear-gradient(to bottom, #000 0%, transparent 100%);
+}
+
+.gradient-bottom {
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, #000 100%);
+}
+
+.top-nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto 0 calc(50% - 350px);
+  padding: 0 24px;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  line-height: 1.667em;
+  text-transform: uppercase;
+}
+
+.top-nav a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.top-nav a:hover {
+  opacity: 0.7;
+}
+
+.separator {
+  width: 5px;
+  height: 5px;
+  background: #fff;
+  display: inline-block;
+  flex-shrink: 0;
+  align-self: center;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+/* Content */
+.content {
+  max-width: 700px;
+  padding: 30vh 24px 40vh;
+  margin: 0 auto 0 calc(50% - 350px);
+  font-size: clamp(16px, 1.2vw + 9px, 22px);
+  line-height: 2em;
+  letter-spacing: 0.08em;
+}
+
+/* Focus-zone scroll effect
+ * Opacity and transform are set entirely by JS via rAF.
+ * will-change: opacity, transform promotes each element to its own
+ * compositor layer, keeping paint off the main thread.
+ * No CSS transition — the rAF loop IS the animation. */
+.content .fade-item {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.content p {
+  margin-bottom: 54px;
+}
+
+.content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Hover image popup */
+.hover-preview {
+  position: fixed;
+  pointer-events: none;
+  z-index: 20;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
+  opacity: 0;
+  overflow: hidden;
+  padding: 16px;
+  width: 292px;
+}
+
+.hover-preview.pinned {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 2px 4px 20px rgba(0, 0, 0, 1);
+}
+
+.hover-preview img {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.hover-preview.visible {
+  opacity: 1;
+}
+
+.hover-preview.pinned {
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.hover-preview.pinned:active {
+  cursor: grabbing;
+}
+
+.hover-preview.pinned img {
+  pointer-events: none;
+  user-select: none;
+}
+
+.hover-preview .card-caption {
+  font-family: 'Authentic Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: #fff;
+  padding: 0;
+}
+
+.hover-preview .card-caption-top {
+  margin-bottom: 12px;
+}
+
+.hover-preview .card-caption-bottom {
+  margin-top: 12px;
+}
+
+.hover-preview .card-cta {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: 'Authentic Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.10);
+  pointer-events: auto;
+  transition: background 0.15s ease;
+}
+
+.hover-preview .card-cta:hover {
+  background: rgba(255, 255, 255, 0.20);
+}
+
+
+.hover-preview.placeholder {
+  width: 292px;
+  height: 200px;
+  background: #222 !important;
+  border-radius: 4px;
+}
+
+/* Pinned tag style */
+[data-hover-img].pinned,
+[data-hover-img].pinned:hover {
+  position: relative;
+  border-color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.logo-close {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 0;
+  z-index: 2;
+}
+
+.logo-close::before {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round'%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+[data-hover-img].pinned .logo-close {
+  display: flex;
+}
+
+/* Email copy */
+.email-copy {
+  cursor: pointer;
+  color: #fff;
+  position: relative;
+}
+
+.email-copy:hover {
+  opacity: 0.8;
+}
+
+.email-copy-icon {
+  display: none;
+  vertical-align: middle;
+  margin-left: 6px;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+  position: relative;
+  top: -1px;
+  width: 16px;
+  height: 16px;
+  overflow: visible;
+}
+
+.email-copy:hover .email-copy-icon {
+  display: inline;
+}
+
+.email-copy:hover .email-copy-icon:hover {
+  opacity: 1;
+}
+
+.email-copy.copied .email-copy-icon {
+  display: none;
+}
+
+.email-copied-label {
+  margin-left: 6px;
+  font-size: 0.7em;
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+}
+
+/* Inline logos */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  position: relative;
+  top: 0px;
+  height: 36px;
+  padding: 0 8px;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  margin-inline: 2px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  backdrop-filter: none;
+}
+
+.logo:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.logo img {
+  height: 22px;
+  object-fit: contain;
+}
+
+/* Per-logo height overrides */
+.logo-msl img { height: 21px; }
+.logo-tbwa { top: 1px; }
+.logo-tbwa img { height: 19px; }
+.logo-tiktok { padding: 0 5px; }
+.logo-tiktok img { height: 25px; }
+.logo-johnst img { height: 23px; }
+.logo-wk img { height: 21px; }
+.logo-commonwealth img { height: 18px; }
+.logo-hilton img { height: 19px; }
+.logo-budlight img { height: 24px; }
+.logo-mountaindew img { height: 26px; }
+.logo-kfc img { height: 20px; }
+.logo-corona img { height: 28px; }
+.logo-axe img { height: 15px; }
+.logo-cannes img { height: 26px; }
+.logo-clios img { height: 19px; }
+.logo-theoneshow img { height: 26px; }
+.logo-effie img { height: 22px; }
+.logo-adage img { height: 21px; }
+.logo-boosiefade img { height: 26px; }
+.logo-tiff img { height: 22px; }
+.logo-redbull img { height: 22px; }
+.logo-livenation img { height: 19px; }
+.logo-eone img { height: 21px; }
+.logo-adidas img { height: 20px; }
+.logo-ssense img { height: 18px; }
+.logo-fader img { height: 22px; }
+.logo-vice img { height: 20px; }
+.logo-complex img { height: 20px; }
+.logo-now img { height: 21px; }
+
+/* Name badge */
+.logo-name {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  height: 36px;
+  padding: 5px 8px 0;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 0.95em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  position: relative;
+  top: 0px;
+  margin-inline: 2px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.logo-name:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Mobile footer */
+.mobile-footer {
+  display: none;
+  padding: 24px;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.mobile-footer a {
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.mobile-footer a:hover {
+  opacity: 0.7;
+}
+
+/* Medium screens: switch to centered */
+@media (max-width: 1010px) {
+  .content {
+    margin: 0 auto;
+    padding: 120px 40px 120px;
+  }
+
+  .top-nav-inner {
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+}
+
+/* ─── Tablet (≤ 680px) ──────────────────────────────────────────────────── */
+@media (max-width: 680px) {
+
+  /* Content
+   * - font-size: explicit 17px floor, no longer relying on clamp shrinking
+   * - line-height: tighten from 2em to 1.8em — the wide line-height reads
+   *   airy on desktop but wastes vertical space on short mobile screens
+   * - letter-spacing: reduce from 0.08em to 0.05em — tracking at small sizes
+   *   adds width without adding clarity
+   * - padding-top: 96px = ~40px nav + 56px breathing room inside gradient
+   * - padding-bottom: 96px = enough for gradient-bottom (80px) plus buffer
+   * - side padding: 24px gives 48px total horizontal margin on a 375px screen
+   */
+  .content {
+    padding: 96px 24px 96px;
+    font-size: 21px;
+    line-height: 2.4em;
+    letter-spacing: 0.05em;
+  }
+
+  .content p {
+    /* 40px ≈ 2.35× line-height (1.8em × 17px = 30.6px) — clear section break */
+    margin-bottom: 40px;
+  }
+
+  /* Logo badges
+   * - height: 44px meets the WCAG 2.5.5 / Apple HIG 44pt touch target minimum
+   * - padding: 0 10px gives more horizontal tap surface
+   * - top: -2px compensates for the taller container sitting in inline flow
+   * - Image heights scaled proportionally from desktop (22px base → 18px base)
+   *   keeping relative ratios between per-logo overrides intact
+   */
+  .logo {
+    height: 40px;
+    padding: 0 8px;
+    top: -1px;
+  }
+
+  .logo img {
+    height: 24px;
+  }
+
+  /* Per-logo overrides: scale each proportionally from desktop values.
+   * Formula: desktop_h / 22 * 18, rounded to nearest integer. */
+  .logo-msl img        { height: 17px; }
+  .logo-tbwa img       { height: 16px; }
+  .logo-tiktok img     { height: 17px; }
+  .logo-johnst img     { height: 16px; }
+  .logo-wk img         { height: 17px; }
+  .logo-commonwealth img { height: 15px; }
+  .logo-hilton img     { height: 16px; }
+  .logo-budlight img   { height: 20px; }
+  .logo-mountaindew img { height: 21px; }
+  .logo-kfc img        { height: 16px; }
+  .logo-corona img     { height: 20px; }
+  .logo-axe img        { height: 15px; }
+  .logo-cannes img     { height: 21px; }
+  .logo-clios img      { height: 16px; }
+  .logo-theoneshow img { height: 21px; }
+  .logo-effie img      { height: 18px; }
+  .logo-adage img      { height: 17px; }
+  .logo-boosiefade img { height: 21px; }
+  .logo-tiff img       { height: 18px; }
+  .logo-redbull img    { height: 18px; }
+  .logo-livenation img { height: 16px; }
+  .logo-eone img       { height: 17px; }
+  .logo-adidas img     { height: 16px; }
+  .logo-ssense img     { height: 15px; }
+  .logo-fader img      { height: 18px; }
+  .logo-vice img       { height: 16px; }
+  .logo-complex img    { height: 16px; }
+  .logo-now img        { height: 17px; }
+
+  .logo-name {
+    height: 32px;
+    font-size: 0.82em;
+  }
+
+  /* Nav
+   * - letter-spacing: reduce from 0.2em to 0.12em — 0.2em at 12px adds 2.4px
+   *   per character; the full nav string barely fits at 320px. 0.12em is still
+   *   clearly spaced and legible while preventing overflow.
+   * - gap: 12px down from 20px; items are fewer (email hidden) so this is fine
+   */
+  .top-nav-inner {
+    margin: 0 auto;
+    padding: 0 16px;
+    gap: 12px;
+    letter-spacing: 0.12em;
+  }
+
+  /* Hide email and its preceding separator from the nav */
+  .desktop-only {
+    display: none;
+  }
+
+  /* Mobile footer: fixed at bottom */
+  .mobile-footer {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: 12px 24px;
+    background: #000;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+}
+
+/* ─── Small mobile (≤ 480px) ────────────────────────────────────────────── */
+@media (max-width: 480px) {
+
+  /* Content
+   * - font-size: 16px is the smallest acceptable body size for this typeface
+   * - padding-top: 88px = nav (~38px) + 50px gap; keeps first word clear of
+   *   the 80px gradient fade (gradient starts at nav bottom, so first visible
+   *   text sits at ~40 + 80 = 120px from top — padding-top 88 + line-height
+   *   ~29px = 117px, just inside the fade, which is intentional/acceptable)
+   * - side padding: 16px is the platform minimum comfortable margin
+   */
+  .content {
+    padding: 88px 16px 88px;
+    font-size: 19px;
+    line-height: 2.4em;
+    letter-spacing: 0.04em;
+  }
+
+  .content p {
+    /* 28px ≈ 1.75× line-height (1.6em × 16px = 25.6px) — proportionate gap */
+    margin-bottom: 28px;
+  }
+
+  /* Logo badges
+   * - Keep 44px height — do NOT reduce below touch target minimum
+   * - Reduce image heights slightly, reduce padding to keep badge width
+   *   proportional to the smaller surrounding text
+   */
+  .logo {
+    height: 40px;
+    padding: 0 8px;
+  }
+
+  .logo img {
+    height: 22px;
+  }
+
+  /* Scale per-logo overrides from the 680px values (18px base → 16px base) */
+  .logo-msl img        { height: 15px; }
+  .logo-tbwa img       { height: 14px; }
+  .logo-tiktok img     { height: 15px; }
+  .logo-johnst img     { height: 14px; }
+  .logo-wk img         { height: 15px; }
+  .logo-commonwealth img { height: 13px; }
+  .logo-hilton img     { height: 14px; }
+  .logo-budlight img   { height: 18px; }
+  .logo-mountaindew img { height: 19px; }
+  .logo-kfc img        { height: 14px; }
+  .logo-corona img     { height: 18px; }
+  .logo-axe img        { height: 13px; }
+  .logo-cannes img     { height: 19px; }
+  .logo-clios img      { height: 14px; }
+  .logo-theoneshow img { height: 19px; }
+  .logo-effie img      { height: 16px; }
+  .logo-adage img      { height: 15px; }
+  .logo-boosiefade img { height: 19px; }
+  .logo-tiff img       { height: 16px; }
+  .logo-redbull img    { height: 16px; }
+  .logo-livenation img { height: 14px; }
+  .logo-eone img       { height: 15px; }
+  .logo-adidas img     { height: 14px; }
+  .logo-ssense img     { height: 13px; }
+  .logo-fader img      { height: 16px; }
+  .logo-vice img       { height: 14px; }
+  .logo-complex img    { height: 14px; }
+  .logo-now img        { height: 15px; }
+
+  /* Name badge: reduce letter-spacing to match body tracking reduction.
+   * 0.05em at 0.8em × 16px = 12.8px renders as 0.64px per character —
+   * still clearly spaced as a badge label without adding unnecessary width. */
+  .logo-name {
+    height: 28px;
+    font-size: 0.8em;
+    letter-spacing: 0.05em;
+    padding: 3px 8px 0;
+  }
+
+  /* Nav: 11px is the comfortable minimum for this typeface at weight 500.
+   * 10px falls below the legibility threshold on most mobile displays.
+   * At 320px: "BRAND STRATEGY" + sep + "NEW YORK" at 11px / 0.15em ≈ 225px,
+   * which fits comfortably within the 320 - 32px = 288px available width.
+   * 0.15em tracking is still clearly label-style while recovering space vs 0.2em.
+   */
+  .top-nav {
+    padding: 8px 8px;
+  }
+
+  .top-nav-inner {
+    font-size: 11px;
+    gap: 8px;
+    padding: 0 8px;
+    letter-spacing: 0.15em;
+  }
+
+  .separator {
+    width: 4px;
+    height: 4px;
+  }
+
+  .mobile-footer {
+    padding: 10px 16px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+  }
+}
+
+/* ─── Extra-small (≤ 390px, iPhone SE / older Android) ─────────────────── */
+@media (max-width: 390px) {
+
+  /* Tightest side padding before content feels cramped */
+  .content {
+    padding: 84px 14px 84px;
+  }
+
+  /* Nav: "BRAND STRATEGY" at 9px / 0.08em = ~108px, "NEW YORK" ~62px,
+   * gap + separator + padding ≈ 36px → total ~206px, fits 320px screen. */
+  .top-nav-inner {
+    font-size: 9px;
+    gap: 6px;
+    letter-spacing: 0.08em;
+  }
+}
