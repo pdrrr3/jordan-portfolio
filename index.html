@@ -97,10 +97,11 @@
       // side.  The nav (~40px) occupies the very top, so the top fade accounts
       // for that dead zone.
 
-      const FOCUS_START  = 0.18;  // fraction of vh — focus zone begins
-      const FOCUS_END    = 0.85;  // fraction of vh — focus zone ends
-      const FADE_TOP     = 0.05;  // fraction of vh — fully invisible above this
-      const FADE_BOTTOM  = 1.0;  // fraction of vh — fully invisible below this
+      const isMobile = window.innerWidth <= 680;
+      const FOCUS_START  = isMobile ? 0.25 : 0.18;
+      const FOCUS_END    = isMobile ? 0.75 : 0.85;
+      const FADE_TOP     = isMobile ? 0.10 : 0.05;
+      const FADE_BOTTOM  = isMobile ? 0.90 : 1.0;
 
       // Easing: smooth-step (3t²-2t³) gives a more organic feel than linear.
       function smoothstep(edge0, edge1, x) {
