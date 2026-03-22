@@ -510,6 +510,15 @@ body {
     max-height: 22px;
   }
 
+  .logo-axe img { height: 16px; max-height: 16px; }
+  .logo-kfc img { height: 16px; max-height: 16px; }
+  .logo-clios img { height: 16px; max-height: 16px; }
+  .logo-tbwa img { height: 16px; max-height: 16px; }
+  .logo-commonwealth img { height: 14px; max-height: 14px; }
+  .logo-msl img { height: 16px; max-height: 16px; }
+  .logo-ssense img { height: 14px; max-height: 14px; }
+  .logo-complex img { height: 16px; max-height: 16px; }
+
   .logo-name {
     height: 32px;
     font-size: 0.9em;
