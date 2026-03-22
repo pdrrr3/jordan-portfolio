@@ -487,7 +487,7 @@ body {
    *   keeping relative ratios between per-logo overrides intact
    */
   .logo {
-    height: calc(2.4em - 4px);
+    height: 32px;
     padding: 0 10px;
     top: -1px;
   }
@@ -528,7 +528,7 @@ body {
   .logo-now img        { height: 24px; }
 
   .logo-name {
-    height: calc(2.4em - 4px);
+    height: 32px;
     font-size: 0.82em;
   }
 
@@ -588,7 +588,7 @@ body {
    *   proportional to the smaller surrounding text
    */
   .logo {
-    height: calc(2.4em - 4px);
+    height: 32px;
     padding: 0 10px;
   }
 
@@ -630,7 +630,7 @@ body {
    * 0.05em at 0.8em × 16px = 12.8px renders as 0.64px per character —
    * still clearly spaced as a badge label without adding unnecessary width. */
   .logo-name {
-    height: calc(2.4em - 4px);
+    height: 32px;
     font-size: 0.8em;
     letter-spacing: 0.05em;
     padding: 3px 8px 0;

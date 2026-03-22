@@ -103,9 +103,9 @@
       // for that dead zone.
 
       const isMobile = window.innerWidth <= 680;
-      const FOCUS_START  = isMobile ? 0.35 : 0.18;
+      const FOCUS_START  = isMobile ? 0.40 : 0.18;
       const FOCUS_END    = isMobile ? 0.65 : 0.85;
-      const FADE_TOP     = isMobile ? 0.15 : 0.05;
+      const FADE_TOP     = isMobile ? 0.20 : 0.05;
       const FADE_BOTTOM  = isMobile ? 0.85 : 1.0;
 
       // Easing: smooth-step (3t²-2t³) gives a more organic feel than linear.
@@ -563,29 +563,42 @@
         hoverPreview.classList.remove('visible');
         currentHoverEl = null;
 
-        // Drag support
+        // Drag support (mouse + touch)
         let isDragging = false;
         let dragX, dragY;
 
-        pinPreview.addEventListener('mousedown', (e) => {
+        function startDrag(clientX, clientY) {
           isDragging = true;
-          dragX = e.clientX - pinPreview.offsetLeft;
-          dragY = e.clientY - pinPreview.offsetTop;
+          dragX = clientX - pinPreview.offsetLeft;
+          dragY = clientY - pinPreview.offsetTop;
           pinPreview.style.cursor = 'grabbing';
-        });
-
-        window.addEventListener('mousemove', (e) => {
+        }
+        function moveDrag(clientX, clientY) {
           if (!isDragging) return;
-          pinPreview.style.left = (e.clientX - dragX) + 'px';
-          pinPreview.style.top = (e.clientY - dragY) + 'px';
-        });
-
-        window.addEventListener('mouseup', () => {
+          pinPreview.style.left = (clientX - dragX) + 'px';
+          pinPreview.style.top = (clientY - dragY) + 'px';
+        }
+        function endDrag() {
           if (isDragging) {
             isDragging = false;
             pinPreview.style.cursor = 'grab';
           }
-        });
+        }
+
+        pinPreview.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+        window.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
+        window.addEventListener('mouseup', endDrag);
+
+        pinPreview.addEventListener('touchstart', (e) => {
+          const t = e.touches[0];
+          startDrag(t.clientX, t.clientY);
+        }, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          const t = e.touches[0];
+          moveDrag(t.clientX, t.clientY);
+        }, { passive: true });
+        window.addEventListener('touchend', endDrag);
 
         el.classList.add('pinned');
         pinnedEls.set(el, pinPreview);
