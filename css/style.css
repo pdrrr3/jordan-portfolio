@@ -164,7 +164,7 @@ body {
 .hover-preview {
   position: fixed;
   pointer-events: none;
-  z-index: 20;
+  z-index: 25;
   border-radius: 8px;
   border: 1px solid transparent;
   background: transparent;
