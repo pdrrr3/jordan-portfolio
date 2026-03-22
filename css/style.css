@@ -234,7 +234,7 @@ body {
   text-transform: uppercase;
   color: #fff;
   text-decoration: none;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 3px;
   padding: 5px 10px;
   background: rgba(255, 255, 255, 0.10);
