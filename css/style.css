@@ -510,13 +510,13 @@ body {
     max-height: 22px;
   }
 
-  .logo-axe img { height: 9px; max-height: 9px; }
-  .logo-kfc img { height: 10px; max-height: 10px; }
+  .logo-axe img { height: 14px; max-height: 14px; }
+  .logo-kfc img { height: 15px; max-height: 15px; }
   .logo-clios img { height: 16px; max-height: 16px; }
   .logo-tbwa img { height: 16px; max-height: 16px; }
-  .logo-commonwealth img { height: 14px; max-height: 14px; }
-  .logo-msl img { height: 10px; max-height: 10px; }
-  .logo-ssense img { height: 8px; max-height: 8px; }
+  .logo-commonwealth img { height: 17px; max-height: 17px; }
+  .logo-msl img { height: 15px; max-height: 15px; }
+  .logo-ssense img { height: 13px; max-height: 13px; }
   .logo-complex img { height: 13px; max-height: 13px; }
 
   .logo-name {
@@ -589,12 +589,12 @@ body {
     max-height: 22px;
   }
   .logo-now img        { height: 15px; }
-  .logo-msl img        { height: 10px; max-height: 10px; }
-  .logo-axe img        { height: 9px; max-height: 9px; }
-  .logo-ssense img     { height: 8px; max-height: 8px; }
-  .logo-kfc img        { height: 10px; max-height: 10px; }
+  .logo-msl img        { height: 13px; max-height: 13px; }
+  .logo-axe img        { height: 12px; max-height: 12px; }
+  .logo-ssense img     { height: 11px; max-height: 11px; }
+  .logo-kfc img        { height: 13px; max-height: 13px; }
   .logo-tbwa img       { height: 16px; max-height: 16px; }
-  .logo-commonwealth img { height: 14px; max-height: 14px; }
+  .logo-commonwealth img { height: 17px; max-height: 17px; }
   .logo-clios img      { height: 16px; max-height: 16px; }
   .logo-complex img    { height: 13px; max-height: 13px; }
 
