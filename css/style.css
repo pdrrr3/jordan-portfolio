@@ -510,14 +510,14 @@ body {
     max-height: 22px;
   }
 
-  .logo-axe img { height: 16px; max-height: 16px; }
-  .logo-kfc img { height: 16px; max-height: 16px; }
+  .logo-axe img { height: 12px; max-height: 12px; }
+  .logo-kfc img { height: 13px; max-height: 13px; }
   .logo-clios img { height: 16px; max-height: 16px; }
   .logo-tbwa img { height: 16px; max-height: 16px; }
   .logo-commonwealth img { height: 14px; max-height: 14px; }
-  .logo-msl img { height: 16px; max-height: 16px; }
-  .logo-ssense img { height: 14px; max-height: 14px; }
-  .logo-complex img { height: 16px; max-height: 16px; }
+  .logo-msl img { height: 13px; max-height: 13px; }
+  .logo-ssense img { height: 11px; max-height: 11px; }
+  .logo-complex img { height: 13px; max-height: 13px; }
 
   .logo-name {
     height: 32px;
