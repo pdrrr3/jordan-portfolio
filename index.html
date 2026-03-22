@@ -224,8 +224,8 @@
           // Same look as the intro — each element fades in one at a time.
           // Triggered when elements enter/exit the viewport.
 
-          const SCROLL_STAGGER = 30;
-          const SCROLL_FADE = 250;
+          const SCROLL_STAGGER = isMobile ? 60 : 30;
+          const SCROLL_FADE = isMobile ? 400 : 250;
           const vh = window.innerHeight;
 
           // Step 1: Reset elements that left the viewport
