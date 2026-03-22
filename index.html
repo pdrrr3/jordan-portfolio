@@ -535,16 +535,12 @@
         el.addEventListener('click', (e) => {
           if (e.target === closeBtn || closeBtn.contains(e.target)) return;
           e.preventDefault();
-          // Hide hover preview first
-          hoverPreview.classList.remove('visible');
-          currentHoverEl = null;
-
           if (pinnedEls.has(el)) {
             unpinEl(el);
           } else if (pinnedEls.size > 0) {
             unpinAll();
           } else {
-            // Build the hover preview content first (needed for cloneNode in pinEl)
+            // Ensure hover preview has content (needed on mobile where no mouseenter fires)
             const src = el.dataset.hoverImg;
             const caption = el.dataset.cardCaption || '';
             const cta = el.dataset.cardCta || '';
@@ -563,6 +559,7 @@
             const pos = hoverPositions.get(el);
             hoverPreview.style.left = pos.x + 'px';
             hoverPreview.style.top = pos.y + 'px';
+            hoverPreview.classList.add('visible');
             pinEl(el);
           }
         });
