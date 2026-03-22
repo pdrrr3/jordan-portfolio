@@ -510,6 +510,7 @@ body {
     max-height: 22px;
   }
 
+  .logo-tiktok { padding: 0 4px; }
   .logo-axe img { height: 14px; max-height: 14px; }
   .logo-hilton img { height: 15px; max-height: 15px; }
   .logo-kfc img { height: 15px; max-height: 15px; }
