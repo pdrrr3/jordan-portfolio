@@ -496,7 +496,7 @@
         el.appendChild(closeBtn);
 
         el.addEventListener('mouseenter', () => {
-          if (pinnedEls.has(el)) return;
+          if (pinnedEls.has(el) || pinnedEls.size > 0) return;
           currentHoverEl = el;
           const src = el.dataset.hoverImg;
           const caption = el.dataset.cardCaption || '';
@@ -527,7 +527,7 @@
         });
 
         el.addEventListener('mouseleave', () => {
-          if (pinnedEls.has(el)) return;
+          if (pinnedEls.has(el) || pinnedEls.size > 0) return;
           currentHoverEl = null;
           hoverPreview.classList.remove('visible');
         });
