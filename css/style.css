@@ -319,6 +319,12 @@ body {
   display: inline;
 }
 
+@media (max-width: 680px) {
+  .email-copy-icon {
+    display: inline !important;
+  }
+}
+
 .email-copy:hover .email-copy-icon:hover {
   opacity: 1;
 }
