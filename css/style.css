@@ -492,7 +492,7 @@ body {
    * - side padding: 24px gives 48px total horizontal margin on a 375px screen
    */
   .content {
-    padding: 40vh 24px 40vh;
+    padding: 30vh 24px 40vh;
     font-size: 20px;
     line-height: 2.4em;
     letter-spacing: 0.05em;
@@ -585,7 +585,7 @@ body {
    * - side padding: 16px is the platform minimum comfortable margin
    */
   .content {
-    padding: 35vh 16px 40vh;
+    padding: 25vh 16px 40vh;
     font-size: 18px;
     line-height: 2.4em;
     letter-spacing: 0.04em;
