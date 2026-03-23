@@ -703,7 +703,7 @@ body {
   }
   .logo:hover,
   .logo-name:hover {
-    background: #fff;
+    background: rgba(0, 0, 0, 0.05);
     border-color: rgba(0, 0, 0, 0.30);
   }
   .logo img {
