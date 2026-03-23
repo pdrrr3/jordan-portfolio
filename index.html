@@ -715,20 +715,23 @@
 
       // ─── 11. Project modal ──────────────────────────────────────────────
       const projectModal = document.getElementById('projectModal');
-      const modalIframe = projectModal.querySelector('.project-modal-video');
+      const modalVideo = projectModal.querySelector('.project-modal-video');
       const modalClose = projectModal.querySelector('.project-modal-close');
       const modalBackdrop = projectModal.querySelector('.project-modal-backdrop');
 
-      const defaultVideo = 'https://www.youtube.com/embed/I25U2aagIfg?autoplay=1&mute=1';
+      const defaultVideo = 'videos/placeholder.mp4';
 
-      function openProjectModal(videoSrc) {
-        modalIframe.src = videoSrc || defaultVideo;
+      function openProjectModal(videoSrc, color) {
+        modalVideo.src = videoSrc || defaultVideo;
+        modalVideo.play();
+        modalBackdrop.style.background = color || 'rgba(0, 0, 0, 0.85)';
         projectModal.classList.add('open');
       }
 
       function closeProjectModal() {
         projectModal.classList.remove('open');
-        modalIframe.src = '';
+        modalVideo.pause();
+        modalVideo.src = '';
       }
 
       modalClose.addEventListener('click', closeProjectModal);
@@ -747,18 +750,14 @@
         const pinPreview = cta.closest('.hover-preview.pinned');
         if (!pinPreview) return;
         let videoSrc = null;
-        let hoverImg = null;
+        let cardColor = null;
         pinnedEls.forEach((preview, el) => {
           if (preview === pinPreview) {
             videoSrc = el.dataset.cardVideo || null;
-            hoverImg = el.dataset.hoverImg || null;
+            cardColor = el.dataset.cardColor || null;
           }
         });
-        if (videoSrc) {
-          openProjectModal(videoSrc);
-        } else {
-          openProjectModal('');
-        }
+        openProjectModal(videoSrc, cardColor);
       });
 
       // ─── 12. Theme toggle via "BRAND STRATEGY" click ──────────────────
@@ -781,7 +780,7 @@
     <div class="project-modal-backdrop"></div>
     <div class="project-modal-content">
       <button class="project-modal-close">&times;</button>
-      <iframe class="project-modal-video" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      <video class="project-modal-video" playsinline muted loop autoplay></video>
     </div>
   </div>
 
