@@ -474,10 +474,10 @@
 
           let x;
           if (isJordan && vw > 800) {
-            // Always right half on desktop
+            // Right half on desktop, but stay on screen
             const rightHalfStart = Math.max(vw / 2, contentRight + 40);
-            const rightHalfEnd = Math.max(rightHalfStart, vw - pw - edgeMargin);
-            x = rightHalfStart + seededRandom(i * 2) * Math.max(0, rightHalfEnd - rightHalfStart);
+            const rightHalfEnd = Math.min(vw - pw - edgeMargin, vw - pw - 20);
+            x = Math.min(rightHalfStart + seededRandom(i * 2) * Math.max(0, rightHalfEnd - rightHalfStart), vw - pw - 20);
           } else if (leftZoneW > 20 && rightZoneW > 20) {
             // Alternate sides based on index for even distribution
             if (i % 2 === 0) {
