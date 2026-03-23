@@ -760,18 +760,6 @@
         openProjectModal(videoSrc, cardColor);
       });
 
-      // ─── 12. Theme toggle via "BRAND STRATEGY" click ──────────────────
-      const brandStrategyEl = document.querySelector('.top-nav-inner > span:first-child');
-      brandStrategyEl.style.cursor = 'pointer';
-      brandStrategyEl.addEventListener('click', () => {
-        const isCurrentlyLight = document.body.classList.contains('light-mode') ||
-          (!document.body.classList.contains('dark-mode') && window.matchMedia('(prefers-color-scheme: light)').matches);
-        document.body.classList.toggle('light-mode', !isCurrentlyLight);
-        document.body.classList.toggle('dark-mode', isCurrentlyLight);
-        document.documentElement.classList.toggle('light-mode', !isCurrentlyLight);
-        document.documentElement.classList.toggle('dark-mode', isCurrentlyLight);
-        hapticSwitch();
-      });
     });
   </script>
 
