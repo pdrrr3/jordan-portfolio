@@ -170,7 +170,7 @@ body {
 .hover-preview {
   position: fixed;
   pointer-events: none;
-  z-index: 25;
+  z-index: 100;
   border-radius: 8px;
   border: 1px solid transparent;
   background: transparent;
@@ -182,6 +182,7 @@ body {
 }
 
 .hover-preview.pinned {
+  z-index: 50;
   border-color: rgba(255, 255, 255, 0.15);
   box-shadow: 2px 4px 20px rgba(0, 0, 0, 1);
 }
@@ -402,7 +403,7 @@ body {
 .logo-corona img { height: 28px; }
 .logo-axe img { height: 15px; }
 .logo-cannes img { height: 26px; }
-.logo-clios img { height: 19px; }
+.logo-clios img { height: 15px; }
 .logo-theoneshow img { height: 26px; }
 .logo-effie img { height: 22px; }
 .logo-adage img { height: 21px; }
@@ -529,7 +530,7 @@ body {
   .logo-vice img { height: 16px; max-height: 16px; }
   .logo-boosiefade img { height: 28px; max-height: 28px; }
   .logo-kfc img { height: 15px; max-height: 15px; }
-  .logo-clios img { height: 16px; max-height: 16px; }
+  .logo-clios img { height: 13px; max-height: 13px; }
   .logo-tbwa img { height: 16px; max-height: 16px; }
   .logo-commonwealth img { height: 17px; max-height: 17px; }
   .logo-msl img { height: 15px; max-height: 15px; }
@@ -791,7 +792,7 @@ body.dark-mode .logo-close { background: #fff !important; }
 body.dark-mode [data-hover-img].pinned, body.dark-mode [data-hover-img].pinned:hover { border-color: rgba(255,255,255,0.75) !important; }
 
 /* ─── Manual light mode override (pressing "t" while in dark mode) ──── */
-body.light-mode { background-color: #fff !important; color: rgba(0,0,0,0.9) !important; font-weight: 500 !important; }
+html.light-mode, body.light-mode { background-color: #fff !important; color: rgba(0,0,0,0.9) !important; font-weight: 500 !important; }
 body.light-mode .top-nav { background: #fff !important; }
 body.light-mode .top-nav-inner { color: rgba(0,0,0,0.5) !important; }
 body.light-mode .separator { background: rgba(0,0,0,0.5) !important; }
