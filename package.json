@@ -1,0 +1,45 @@
+{
+  "name": "jordan-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "predev": "npm run typegen",
+    "dev": "next dev",
+    "prebuild": "npm run typegen",
+    "build": "next build",
+    "build:frontend": "tsx scripts/build-frontend-export.ts",
+    "start": "next start",
+    "deploy:frontend": "npm run build:frontend && tsx scripts/deploy-frontend.ts",
+    "lint": "next lint",
+    "typegen": "tsx scripts/sanity/typegen.ts",
+    "sanity:seed": "tsx scripts/sanity/seed.ts",
+    "cms:init": "tsx scripts/cms/init.ts",
+    "cms:publish": "tsx scripts/cms/publish.ts",
+    "cms:test-flow": "tsx scripts/cms/test-flow.ts",
+    "cms:cf:deploy": "npx wrangler deploy",
+    "cms:cf:seed": "tsx scripts/cms/cloudflare/seed.ts",
+    "cms:cf:test": "tsx scripts/cms/cloudflare/test-pipeline.ts"
+  },
+  "dependencies": {
+    "@sanity/client": "^7.14.0",
+    "@sanity/vision": "^3.99.0",
+    "next": "14.2.25",
+    "next-sanity": "^9.12.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "sanity": "^3.99.0",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.25",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "tsx": "^4.20.6",
+    "typescript": "^5.6.3"
+  }
+}

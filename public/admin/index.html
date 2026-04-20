@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio CMS</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --sidebar-bg: #111111;
+      --surface: #1a1a1a;
+      --surface-hover: #222222;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(255, 255, 255, 0.25);
+      --text: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.4);
+      --text-secondary: rgba(255, 255, 255, 0.65);
+      --accent: #ffffff;
+      --sidebar-width: 220px;
+      --topbar-height: 52px;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Top bar ─────────────────────────────────────────── */
+    #topbar {
+      height: var(--topbar-height);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 0 20px;
+      background: var(--bg);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .topbar-title {
+      margin-right: auto;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .save-indicator {
+      font-size: 11px;
+      color: var(--text-muted);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .save-indicator.visible {
+      opacity: 1;
+    }
+
+    /* ── Buttons ─────────────────────────────────────────── */
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-focus);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-color: transparent;
+      color: var(--text-secondary);
+    }
+
+    .btn-ghost:hover {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    /* Hidden file input for import */
+    #import-file {
+      display: none;
+    }
+
+    /* ── Layout ──────────────────────────────────────────── */
+    #layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── Sidebar ─────────────────────────────────────────── */
+    #sidebar {
+      width: var(--sidebar-width);
+      flex-shrink: 0;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-brand {
+      padding: 20px 16px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-brand-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .sidebar-brand-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .sidebar-nav {
+      padding: 8px 0;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 13px;
+      border-left: 2px solid transparent;
+      transition: color 0.15s, background 0.15s, border-color 0.15s;
+      user-select: none;
+    }
+
+    .nav-item:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .nav-item.active {
+      color: var(--text);
+      border-left-color: var(--text);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .nav-icon {
+      font-size: 14px;
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Main area ───────────────────────────────────────── */
+    #main {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Sections ────────────────────────────────────────── */
+    .section {
+      display: none;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .section.active {
+      display: flex;
+    }
+
+    /* ── Case Studies layout ─────────────────────────────── */
+    #section-case-studies {
+      flex-direction: row;
+    }
+
+    .cs-list {
+      width: 200px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    .cs-list-item {
+      padding: 8px 16px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 13px;
+      border-left: 2px solid transparent;
+      transition: color 0.15s, background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cs-list-item:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .cs-list-item.active {
+      color: var(--text);
+      border-left-color: var(--text);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .cs-editor {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 32px;
+    }
+
+    .cs-empty {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    /* ── Logo Cards layout ───────────────────────────────── */
+    #section-logo-cards {
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .lc-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 32px;
+    }
+
+    /* ── Form elements ───────────────────────────────────── */
+    .editor-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      gap: 16px;
+    }
+
+    .editor-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .editor-slug {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 3px;
+      font-family: "SF Mono", "Fira Mono", "Cascadia Code", monospace;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 8px 10px;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.15s;
+      resize: vertical;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--border-focus);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-textarea {
+      line-height: 1.6;
+    }
+
+    .form-textarea.short {
+      min-height: 60px;
+    }
+
+    .form-textarea.body {
+      min-height: 280px;
+    }
+
+    .slides-label {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .slide-card {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 10px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .slide-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .slide-num {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .slide-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .btn-xs {
+      font-size: 11px;
+      padding: 3px 8px;
+    }
+
+    .slide-text {
+      min-height: 120px;
+    }
+
+    /* ── Media picker ────────────────────────────────────── */
+    .media-picker-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .media-current {
+      width: 72px;
+      height: 52px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface);
+    }
+
+    .media-current img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .media-current-empty {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 4px;
+      line-height: 1.3;
+    }
+
+    .media-current-video {
+      font-size: 10px;
+      color: var(--text-secondary);
+      text-align: center;
+      padding: 4px;
+      line-height: 1.4;
+      word-break: break-all;
+    }
+
+    .media-picker-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* ── Media modal ─────────────────────────────────────── */
+    #media-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #media-modal.open {
+      display: flex;
+    }
+
+    .media-modal-inner {
+      background: var(--sidebar-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      width: 680px;
+      max-width: calc(100vw - 40px);
+      max-height: calc(100vh - 60px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .media-modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      gap: 12px;
+    }
+
+    .media-modal-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .media-modal-path {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-family: "SF Mono", "Fira Mono", monospace;
+      margin-top: 3px;
+      word-break: break-all;
+    }
+
+    .media-grid {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 10px;
+      align-content: start;
+    }
+
+    .media-grid-item {
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      background: var(--surface);
+    }
+
+    .media-grid-item:hover {
+      border-color: rgba(255,255,255,0.3);
+      background: var(--surface-hover);
+    }
+
+    .media-grid-thumb {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+      background: var(--bg);
+    }
+
+    .media-grid-video-thumb {
+      width: 100%;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      background: #111;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .media-grid-name {
+      font-size: 10px;
+      color: var(--text-muted);
+      padding: 5px 7px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .media-empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+      padding: 40px 20px;
+      line-height: 1.8;
+    }
+
+    /* ── Role tag manager ────────────────────────────────── */
+    .role-tags-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .role-tags-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 28px;
+    }
+
+    .role-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 3px 8px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .role-tag-del {
+      appearance: none;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 0 0 2px;
+    }
+
+    .role-tag-del:hover {
+      color: var(--text);
+    }
+
+    .role-add-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .role-add-row .form-input {
+      flex: 1;
+    }
+
+    /* ── Logo Cards table ────────────────────────────────── */
+    .lc-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .lc-table th {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: left;
+      padding: 0 10px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lc-table th:first-child {
+      padding-left: 0;
+    }
+
+    .lc-table td {
+      padding: 6px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: middle;
+    }
+
+    .lc-table td:first-child {
+      padding-left: 0;
+    }
+
+    .lc-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .lc-id {
+      font-family: "SF Mono", "Fira Mono", "Cascadia Code", monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      min-width: 150px;
+    }
+
+    .lc-caption-cell {
+      width: auto;
+      min-width: 240px;
+    }
+
+    .lc-link-cell {
+      width: 320px;
+      min-width: 320px;
+    }
+
+    .lc-caption-cell .form-input,
+    .lc-link-cell .form-input {
+      min-width: 0;
+    }
+
+    .lc-color-cell {
+      white-space: nowrap;
+    }
+
+    .color-field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .color-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      flex-shrink: 0;
+      padding: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      background: none;
+    }
+
+    .color-swatch::-webkit-color-swatch-wrapper {
+      padding: 2px;
+    }
+
+    .color-swatch::-webkit-color-swatch {
+      border: none;
+      border-radius: 2px;
+    }
+
+    .color-hex {
+      width: 82px;
+      font-family: "SF Mono", "Fira Mono", "Cascadia Code", monospace;
+      font-size: 12px;
+    }
+
+    /* ── Section heading ─────────────────────────────────── */
+    .section-heading {
+      padding: 20px 32px 0;
+      margin-bottom: 20px;
+    }
+
+    .section-heading h2 {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .section-heading p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* ── Scrollbars ──────────────────────────────────────── */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.12);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* ── Toast ───────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--surface-hover);
+      border: 1px solid var(--border-focus);
+      color: var(--text);
+      font-size: 12px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Logo card drag handle & delete */
+    .lc-drag { cursor: grab; color: var(--text-muted); font-size: 16px; user-select: none; line-height: 1; }
+    .lc-drag:active { cursor: grabbing; }
+    tr.lc-dragging { opacity: 0.35; }
+    tr.lc-drag-over > td { box-shadow: inset 0 -2px 0 rgba(255,255,255,0.3); }
+    .lc-del { appearance: none; background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 17px; padding: 2px 4px; border-radius: 3px; line-height: 1; }
+    .lc-del:hover { color: #ff5050; background: rgba(255,60,60,0.08); }
+
+    /* Add logo form */
+    .lc-add-form { margin-top: 16px; padding: 16px; border: 1px solid var(--border); border-radius: 6px; background: rgba(255,255,255,0.02); }
+    .lc-add-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+
+    /* Para token chips */
+    .para-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; align-items: center; min-height: 28px; }
+    .chip { display: inline-flex; align-items: center; gap: 3px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 3px; padding: 2px 5px 2px 8px; font-size: 11px; font-family: "SF Mono","Fira Mono",monospace; color: rgba(255,255,255,0.6); cursor: grab; user-select: none; }
+    .chip:active { cursor: grabbing; }
+    .chip.chip-drag-over { border-left: 2px solid rgba(255,255,255,0.45); }
+    .chip.chip-dragging { opacity: 0.3; }
+    .chip-x { appearance: none; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 13px; line-height: 1; padding: 0 1px; }
+    .chip-x:hover { color: #fff; }
+    .chip-add { appearance: none; background: none; border: 1px dashed rgba(255,255,255,0.15); color: var(--text-muted); cursor: pointer; font-size: 11px; padding: 2px 9px; border-radius: 3px; font-family: inherit; position: relative; }
+    .chip-add:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
+    .chip-dropdown { position: absolute; top: calc(100% + 3px); left: 0; background: #1e1e1e; border: 1px solid var(--border-focus); border-radius: 5px; z-index: 50; max-height: 180px; overflow-y: auto; min-width: 160px; padding: 3px 0; display: none; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
+    .chip-dropdown.open { display: block; }
+    .chip-opt { padding: 5px 12px; font-size: 11px; font-family: "SF Mono","Fira Mono",monospace; color: var(--text-secondary); cursor: pointer; white-space: nowrap; }
+    .chip-opt:hover { background: rgba(255,255,255,0.07); color: #fff; }
+  </style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div id="topbar">
+  <span class="topbar-title">Portfolio CMS</span>
+  <span class="save-indicator" id="save-indicator">Saved</span>
+  <button class="btn btn-ghost" id="btn-refresh">Refresh</button>
+  <button class="btn btn-ghost" id="btn-import">Import JSON</button>
+  <button class="btn" id="btn-export">Export JSON</button>
+  <button class="btn" id="btn-publish">Publish</button>
+  <input type="file" id="import-file" accept=".json,application/json" />
+</div>
+
+<!-- Layout -->
+<div id="layout">
+
+  <!-- Sidebar -->
+  <nav id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-name">Jordan Sowunmi</div>
+      <div class="sidebar-brand-sub">Content Manager</div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-item active" data-section="case-studies">
+        <span class="nav-icon">◈</span>
+        Case Studies
+      </div>
+      <div class="nav-item" data-section="logo-cards">
+        <span class="nav-icon">▦</span>
+        Logo Cards
+      </div>
+      <div class="nav-item" data-section="copy">
+        <span class="nav-icon">¶</span>
+        Copy
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main id="main">
+
+    <!-- Case Studies -->
+    <div class="section active" id="section-case-studies">
+      <div class="cs-list" id="cs-list">
+        <!-- populated by JS -->
+      </div>
+      <div class="cs-empty" id="cs-empty">Select a project to edit</div>
+      <div class="cs-editor" id="cs-editor" style="display:none;"></div>
+    </div>
+
+    <!-- Copy -->
+    <div class="section" id="section-copy">
+      <div class="lc-scroll">
+        <div class="section-heading">
+          <h2>Homepage Copy</h2>
+          <p>Edit paragraph text. Use <code style="background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:3px;font-size:11px;">{{logo-id}}</code> to embed a logo inline.</p>
+        </div>
+        <div id="copy-editor" style="max-width:680px;"></div>
+        <div style="margin-top:24px;padding:16px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:6px;max-width:680px;">
+          <div class="form-label" style="margin-bottom:10px;">Available logo tokens</div>
+          <div id="token-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logo Cards -->
+    <div class="section" id="section-logo-cards">
+      <div class="lc-scroll">
+        <div class="section-heading" style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
+          <div>
+            <h2>Logo Cards</h2>
+            <p>Drag ⠿ to reorder. Add or remove logos and configure caption, color, and link.</p>
+          </div>
+          <button class="btn" id="btn-add-logo" style="flex-shrink:0;margin-top:2px;">+ Add logo</button>
+        </div>
+        <table class="lc-table" id="lc-table">
+          <thead>
+            <tr>
+              <th style="width:20px;"></th>
+              <th>ID / Logo file</th>
+              <th>Caption</th>
+              <th>Link</th>
+              <th>Color</th>
+              <th style="width:28px;"></th>
+            </tr>
+          </thead>
+          <tbody id="lc-tbody">
+            <!-- populated by JS -->
+          </tbody>
+        </table>
+        <!-- Add logo form (hidden) -->
+        <div class="lc-add-form" id="lc-add-form" style="display:none;">
+          <div class="form-label" style="margin-bottom:10px;">New Logo Card</div>
+          <div class="lc-add-grid">
+            <div>
+              <div class="form-label" style="margin-bottom:4px;">ID (slug)</div>
+              <input class="form-input" id="lc-new-id" type="text" placeholder="e.g. google" spellcheck="false" />
+            </div>
+            <div>
+              <div class="form-label" style="margin-bottom:4px;">Logo file path</div>
+              <input class="form-input" id="lc-new-file" type="text" placeholder="logos/name.svg" spellcheck="false" />
+            </div>
+            <div>
+              <div class="form-label" style="margin-bottom:4px;">Caption</div>
+              <input class="form-input" id="lc-new-caption" type="text" placeholder="Role or year" />
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <div class="color-field">
+              <input class="color-swatch" id="lc-new-swatch" type="color" value="#1a1a1a" title="Background color" />
+              <input class="form-input color-hex" id="lc-new-color" type="text" value="#1a1a1a" placeholder="#1a1a1a" spellcheck="false" />
+            </div>
+            <button class="btn" id="lc-new-confirm" style="margin-left:auto;">Add</button>
+            <button class="btn btn-ghost" id="lc-new-cancel">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Media Library Modal -->
+<div id="media-modal">
+  <div class="media-modal-inner">
+    <div class="media-modal-header">
+      <div>
+        <div class="media-modal-title">Media Library</div>
+        <div class="media-modal-path" id="media-folder-path"></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
+        <button class="btn btn-ghost" id="btn-scan-folder">Upload</button>
+        <button class="btn btn-ghost" id="btn-close-media" style="padding:6px 10px;">✕</button>
+      </div>
+    </div>
+    <div id="media-grid" class="media-grid"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ── Constants ───────────────────────────────────────────
+  const CMS_API_BASE = (window.CMS_API_BASE || "https://jordan-portfolio-cms-hook.timur-23f.workers.dev").replace(/\/$/, "");
+
+  function apiUrl(path) {
+    return `${CMS_API_BASE}${path}`;
+  }
+
+  const LOGO_IDS = [
+    "tiktok-company", "wk", "tbwa", "anomaly", "vice-company",
+    "spotify", "hilton", "corona", "budlight", "mountaindew",
+    "papajohns", "doritos", "tiktok-music", "sonic", "chevrolet",
+    "boosiefade", "tiff-boosiefade", "majorfixnyc", "ssense",
+    "fader", "vice-writing", "complex", "tiff-speaking",
+    "digologue", "cmw"
+  ];
+
+  const PARAGRAPH_LABELS = [
+    "Paragraph 1 — Introduction",
+    "Paragraph 2 — Career",
+    "Paragraph 3 — Brand work",
+    "Paragraph 4 — Personal projects",
+    "Paragraph 5 — Writing",
+    "Paragraph 6 — Speaking",
+  ];
+
+  const DEFAULT_PARAGRAPHS = [
+    "{{jordan}} is a cultural strategist, currently working as a freelance Strategy Director and VP Brand Consultant in New York City.",
+    "For the past 15 years, he has worked at the intersection of advertising and culture \u2014 work that took shape at some of the most recognizable companies in the business: {{tiktok-company}}, {{wk}}, {{tbwa}}, {{anomaly}}, and {{vice-company}}.",
+    "Across these roles, he has developed integrated strategy and content for {{spotify}}, {{hilton}}, {{corona}}, {{budlight}}, {{mountaindew}}, {{papajohns}} and {{doritos}}, {{tiktok-music}}, {{sonic}}, {{chevrolet}} and many others.",
+    "Outside of brand consulting and strategy work, Jordan is the co-founder of {{boosiefade}}, a hip-hop party-turned-cultural platform comprising online communities, a music-criticism podcast, and a film-programming series in partnership with {{tiff-boosiefade}}. Jordan is also the founder, host, and producer of {{majorfixnyc}}, a PowerPoint lecture series about obsession.",
+    "His writing has appeared in {{ssense}}, {{fader}}, {{vice-writing}}, and {{complex}}, among others.",
+    "He\u2019s also a frequent public speaker \u2014 hosting red carpets and moderating panels in film, music, and brand strategy at {{tiff-speaking}}, {{digologue}}, {{cmw}}, and others.",
+  ];
+
+  const PROJECT_SLUGS = [
+    "spotify", "hilton", "corona", "budlight", "mountaindew",
+    "papajohns", "doritos", "tiktok-music", "sonic", "chevrolet"
+  ];
+
+  // ── State ────────────────────────────────────────────────
+  let data = null;
+  let activeSection = "case-studies";
+  let activeSlug = null;
+  let saveTimer = null;
+  let mediaFiles = [];
+  let mediaPickerCallback = null;
+  let toastTimer = null;
+  let saveInFlight = false;
+
+  const mediaUploadInput = document.createElement('input');
+  mediaUploadInput.type = 'file';
+  mediaUploadInput.multiple = true;
+  mediaUploadInput.accept = 'image/*,video/*';
+
+  // ── Default data ─────────────────────────────────────────
+  function makeDefaults() {
+    const d = { logoCards: {}, caseStudies: {}, paragraphs: [...DEFAULT_PARAGRAPHS] };
+    LOGO_IDS.forEach(id => {
+      d.logoCards[id] = { caption: "", color: "#1a1a1a" };
+    });
+    const titleMap = {
+      'budlight': 'Bud Light', 'mountaindew': 'Mountain Dew',
+      'papajohns': "Papa John's", 'tiktok-music': 'TikTok Music'
+    };
+    PROJECT_SLUGS.forEach(slug => {
+      d.caseStudies[slug] = {
+        title: titleMap[slug] || slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        role: [],
+        slides: [{ image: "", title: "", text: "" }]
+      };
+    });
+    return d;
+  }
+
+  // ── Merge incoming data with defaults ────────────────────
+  function mergeWithDefaults(incoming) {
+    const defaults = makeDefaults();
+    const result = { logoCards: {}, caseStudies: {} };
+
+    // Known logos first (in LOGO_IDS order)
+    LOGO_IDS.forEach(id => {
+      const def = defaults.logoCards[id];
+      const inc = (incoming.logoCards || {})[id] || {};
+      result.logoCards[id] = {
+        caption:  inc.caption  !== undefined ? inc.caption  : def.caption,
+        color:    inc.color    !== undefined ? inc.color    : def.color,
+        link:     inc.link     !== undefined ? inc.link     : '',
+        linkText: inc.linkText !== undefined ? inc.linkText : '',
+        logoFile: inc.logoFile !== undefined ? inc.logoFile : ''
+      };
+    });
+
+    // User-added logos not in LOGO_IDS (preserve their order from incoming)
+    Object.keys(incoming.logoCards || {}).forEach(id => {
+      if (!LOGO_IDS.includes(id)) {
+        const inc = incoming.logoCards[id];
+        result.logoCards[id] = {
+          caption:  inc.caption  || '',
+          color:    inc.color    || '#1a1a1a',
+          link:     inc.link     || '',
+          linkText: inc.linkText || '',
+          logoFile: inc.logoFile || ''
+        };
+      }
+    });
+
+    PROJECT_SLUGS.forEach(slug => {
+      const def = defaults.caseStudies[slug];
+      const inc = (incoming.caseStudies || {})[slug] || {};
+      result.caseStudies[slug] = {
+        title:  inc.title  !== undefined ? inc.title  : def.title,
+        role:   inc.role   !== undefined ? inc.role   : def.role,
+        slides: Array.isArray(inc.slides) && inc.slides.length ? inc.slides : def.slides
+      };
+    });
+
+    result.paragraphs = Array.isArray(incoming.paragraphs) && incoming.paragraphs.length
+      ? incoming.paragraphs
+      : [...DEFAULT_PARAGRAPHS];
+
+    return result;
+  }
+
+  // ── Persistence ──────────────────────────────────────────
+  async function saveStage() {
+    if (saveInFlight) return;
+    saveInFlight = true;
+
+    try {
+      const res = await fetch(apiUrl('/api/cms/stage'), {
+        method: 'PUT',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          content: data
+        })
+      });
+
+      const payload = await res.json();
+      if (!res.ok) {
+        throw new Error(payload?.error || 'Failed to save staged content');
+      }
+
+      applyCmsState(payload);
+      showSaveIndicator(payload?.diff?.hasChanges ? 'Staged' : 'Saved');
+    } catch (e) {
+      showToast("Failed to save draft: " + (e?.message || e));
+    } finally {
+      saveInFlight = false;
+    }
+  }
+
+  function debouncedSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      void saveStage();
+    }, 350);
+  }
+
+  function showSaveIndicator(label) {
+    const el = document.getElementById("save-indicator");
+    if (label) el.textContent = label;
+    el.classList.add("visible");
+    clearTimeout(el._timer);
+    el._timer = setTimeout(() => el.classList.remove("visible"), 1800);
+  }
+
+  // ── Toast ────────────────────────────────────────────────
+  function showToast(msg) {
+    const el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 2800);
+  }
+
+  function normalizeAssets(assets) {
+    return (assets || []).map(asset => ({
+      key: asset.key || asset.url,
+      url: asset.url || '',
+      mimeType: asset.mimeType || '',
+      uploadedAt: asset.uploadedAt || ''
+    })).filter(asset => asset.url);
+  }
+
+  function applyCmsState(state) {
+    data = mergeWithDefaults((state && state.stage && state.stage.content) || {});
+    mediaFiles = normalizeAssets(state?.assets || []);
+  }
+
+  // ── Load data ────────────────────────────────────────────
+  async function loadData() {
+    try {
+      const res = await fetch(apiUrl('/api/cms/state'), { cache: 'no-store' });
+      const state = await res.json();
+      if (!res.ok) throw new Error(state?.error || 'Failed to load CMS state');
+      applyCmsState(state);
+      showSaveIndicator('Live');
+      return;
+    } catch (e) {
+      console.warn("Failed to fetch CMS state:", e);
+    }
+
+    // Fallback to defaults for offline mode.
+    data = makeDefaults();
+    mediaFiles = [];
+  }
+
+  async function refreshFromServer() {
+    try {
+      const res = await fetch(apiUrl('/api/cms/state'), { cache: 'no-store' });
+      const state = await res.json();
+      if (!res.ok) throw new Error(state?.error || 'Failed to refresh state');
+      applyCmsState(state);
+      renderAll();
+      showToast('Refreshed from server');
+    } catch (e) {
+      showToast("Refresh failed: " + (e?.message || e));
+    }
+  }
+
+  async function publishNow() {
+    try {
+      const res = await fetch(apiUrl('/api/cms/publish'), {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          reason: 'Publish from legacy admin UI',
+          triggerDeployHook: true
+        })
+      });
+
+      const payload = await res.json();
+      if (!res.ok) throw new Error(payload?.error || 'Failed to publish');
+
+      if (payload.state) {
+        applyCmsState(payload.state);
+        renderAll();
+      }
+
+      if (payload.publish?.published) {
+        showToast(`Published ${payload.publish.previousLiveVersion} -> ${payload.publish.newLiveVersion}`);
+      } else {
+        showToast('No staged changes to publish');
+      }
+    } catch (e) {
+      showToast("Publish failed: " + (e?.message || e));
+    }
+  }
+
+  // ── Export JSON ──────────────────────────────────────────
+  function exportJSON() {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "content.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("Exported content.json");
+  }
+
+  // ── Import JSON ──────────────────────────────────────────
+  function importJSON(file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        const parsed = JSON.parse(e.target.result);
+        data = mergeWithDefaults(parsed);
+        renderAll();
+        void saveStage();
+        showToast("Imported " + file.name);
+      } catch (err) {
+        showToast("Import failed: invalid JSON");
+        console.error(err);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // ── Media library ─────────────────────────────────────────
+  function openMediaPicker(callback) {
+    mediaPickerCallback = callback;
+    renderMediaGrid();
+    document.getElementById('media-modal').classList.add('open');
+    document.getElementById('media-folder-path').textContent = apiUrl('/assets/media/');
+  }
+
+  function closeMediaPicker() {
+    document.getElementById('media-modal').classList.remove('open');
+    mediaPickerCallback = null;
+  }
+
+  function selectMedia(path) {
+    if (mediaPickerCallback) mediaPickerCallback(path);
+    closeMediaPicker();
+  }
+
+  function renderMediaGrid() {
+    const grid = document.getElementById('media-grid');
+    if (!grid) return;
+    if (mediaFiles.length === 0) {
+      grid.innerHTML = '<div class="media-empty-state">No files yet.<br>Click <strong>Upload</strong> to add assets.</div>';
+      return;
+    }
+    grid.innerHTML = mediaFiles.map(asset => {
+      const url = asset.url;
+      const key = asset.key || url;
+      const isVideo = (asset.mimeType || '').startsWith('video/') || /\.(mp4|webm|mov)(\?|$)/i.test(url);
+      const name = key.split('/').pop();
+      const thumb = isVideo
+        ? `<div class="media-grid-video-thumb">▶</div>`
+        : `<img class="media-grid-thumb" src="${escAttr(url)}" alt="${escHtml(name)}" loading="lazy">`;
+      return `<div class="media-grid-item" data-path="${escAttr(url)}">${thumb}<div class="media-grid-name">${escHtml(name)}</div></div>`;
+    }).join('');
+    grid.querySelectorAll('.media-grid-item').forEach(el => {
+      el.addEventListener('click', () => selectMedia(el.dataset.path));
+    });
+  }
+
+  async function scanMediaFolder() {
+    mediaUploadInput.value = '';
+    mediaUploadInput.click();
+  }
+
+  // ── Render ───────────────────────────────────────────────
+  function renderAll() {
+    renderCsList();
+    renderLogoCards();
+    renderCopy();
+    if (activeSlug) {
+      renderCsEditor(activeSlug);
+    }
+  }
+
+  // ── Case Studies list ─────────────────────────────────────
+  function renderCsList() {
+    const list = document.getElementById("cs-list");
+    list.innerHTML = "";
+    PROJECT_SLUGS.forEach(slug => {
+      const item = document.createElement("div");
+      item.className = "cs-list-item" + (slug === activeSlug ? " active" : "");
+      item.textContent = data.caseStudies[slug].title || slug;
+      item.addEventListener("click", () => selectSlug(slug));
+      list.appendChild(item);
+    });
+  }
+
+  function selectSlug(slug) {
+    activeSlug = slug;
+    // Update list active state
+    document.querySelectorAll(".cs-list-item").forEach(el => {
+      el.classList.toggle("active", el.textContent === (data.caseStudies[slug].title || slug));
+    });
+    renderCsList(); // re-render to update active
+    renderCsEditor(slug);
+  }
+
+  // ── Case Study editor (slides) ────────────────────────────
+  function renderCsEditor(slug) {
+    const empty = document.getElementById("cs-empty");
+    const editor = document.getElementById("cs-editor");
+    empty.style.display = "none";
+    editor.style.display = "block";
+
+    const cs = data.caseStudies[slug];
+    if (!Array.isArray(cs.slides) || !cs.slides.length) cs.slides = [{ image: "", title: "", text: "" }];
+    if (!Array.isArray(cs.role)) cs.role = cs.role ? [cs.role] : [];
+
+    function roleTagsHtml() {
+      return (cs.role || []).map((s, i) => `<span class="role-tag">${escHtml(s)}<button class="role-tag-del" data-index="${i}">×</button></span>`).join('');
+    }
+
+    function rebuildRoleTags() {
+      editor.querySelector("#role-tags").innerHTML = roleTagsHtml();
+      bindRoleTagEvents();
+    }
+
+    function slideMediaHtml(slide, i) {
+      const isVideo = /\.(mp4|webm|mov)$/i.test(slide.image || '');
+      if (!slide.image) {
+        return `<div class="media-current media-current-empty">No media</div>`;
+      }
+      if (isVideo) {
+        return `<div class="media-current media-current-video">▶<br>${escHtml(slide.image.split('/').pop())}</div>`;
+      }
+      return `<div class="media-current"><img src="${escAttr(slide.image)}" alt=""></div>`;
+    }
+
+    function slidesHtml() {
+      return cs.slides.map((slide, i) => `
+        <div class="slide-card" data-index="${i}">
+          <div class="slide-card-header">
+            <span class="slide-num">Slide ${i + 1}</span>
+            <div class="slide-actions">
+              ${i > 0 ? `<button class="btn btn-ghost btn-xs slide-up" data-index="${i}">↑</button>` : ''}
+              ${i < cs.slides.length - 1 ? `<button class="btn btn-ghost btn-xs slide-down" data-index="${i}">↓</button>` : ''}
+              ${cs.slides.length > 1 ? `<button class="btn btn-ghost btn-xs slide-delete" data-index="${i}">✕</button>` : ''}
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:10px">
+            <label class="form-label">Slide title <span style="opacity:.4">(optional)</span></label>
+            <input class="form-input slide-title" data-index="${i}" type="text" value="${escAttr(slide.title || '')}" placeholder="e.g. The Brief" />
+          </div>
+          <div class="form-group" style="margin-bottom:10px">
+            <label class="form-label">Media <span style="opacity:.4">(optional)</span></label>
+            <div class="media-picker-row">
+              ${slideMediaHtml(slide, i)}
+              <div class="media-picker-btns">
+                <button class="btn btn-xs media-pick-btn" data-index="${i}">Choose</button>
+                ${slide.image ? `<button class="btn btn-ghost btn-xs media-clear-btn" data-index="${i}">Remove</button>` : ''}
+              </div>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">Text <span style="opacity:.4">(**bold** *italic* — double newline = new paragraph)</span></label>
+            <textarea class="form-textarea slide-text" data-index="${i}" placeholder="Slide content…">${escHtml(slide.text || '')}</textarea>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function rebuildEditor() {
+      editor.querySelector("#slides-container").innerHTML = slidesHtml();
+      bindSlideEvents();
+    }
+
+    editor.innerHTML = `
+      <div class="editor-header">
+        <div>
+          <div class="editor-title">${escHtml(cs.title || slug)}</div>
+          <div class="editor-slug">${escHtml(slug)}</div>
+        </div>
+        <button class="btn btn-ghost" id="preview-btn">Preview ↗</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input class="form-input" id="cs-title" type="text" value="${escAttr(cs.title)}" placeholder="Project title" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Services</label>
+        <div class="role-tags-field">
+          <div id="role-tags" class="role-tags-list">${roleTagsHtml()}</div>
+          <div class="role-add-row">
+            <input class="form-input" id="role-new-input" type="text" placeholder="Add a service…" />
+            <button class="btn" id="role-add-btn">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="slides-section">
+        <div class="slides-label">Slides</div>
+        <div id="slides-container">${slidesHtml()}</div>
+        <button class="btn btn-ghost" id="add-slide-btn" style="margin-top:12px;width:100%">+ Add slide</button>
+      </div>
+    `;
+
+    editor.querySelector("#preview-btn").addEventListener("click", () => {
+      window.open(`../index.html#${encodeURIComponent(slug)}`, "_blank");
+    });
+
+    editor.querySelector("#cs-title").addEventListener("input", function() {
+      data.caseStudies[slug].title = this.value;
+      editor.querySelector(".editor-title").textContent = this.value || slug;
+      renderCsList();
+      debouncedSave();
+    });
+
+    function bindRoleTagEvents() {
+      editor.querySelectorAll(".role-tag-del").forEach(btn => {
+        btn.addEventListener("click", function() {
+          cs.role.splice(+this.dataset.index, 1);
+          rebuildRoleTags();
+          debouncedSave();
+        });
+      });
+    }
+
+    function addService() {
+      const input = editor.querySelector("#role-new-input");
+      const val = input.value.trim();
+      if (!val) return;
+      cs.role.push(val);
+      input.value = "";
+      rebuildRoleTags();
+      debouncedSave();
+    }
+
+    bindRoleTagEvents();
+
+    editor.querySelector("#role-add-btn").addEventListener("click", addService);
+    editor.querySelector("#role-new-input").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") addService();
+    });
+
+    editor.querySelector("#add-slide-btn").addEventListener("click", () => {
+      cs.slides.push({ image: "", title: "", text: "" });
+      rebuildEditor();
+      debouncedSave();
+    });
+
+    function bindSlideEvents() {
+      editor.querySelectorAll(".slide-title").forEach(el => {
+        el.addEventListener("input", function() {
+          cs.slides[+this.dataset.index].title = this.value;
+          debouncedSave();
+        });
+      });
+      editor.querySelectorAll(".media-pick-btn").forEach(el => {
+        el.addEventListener("click", function() {
+          const i = +this.dataset.index;
+          openMediaPicker(path => {
+            cs.slides[i].image = path;
+            rebuildEditor();
+            debouncedSave();
+          });
+        });
+      });
+      editor.querySelectorAll(".media-clear-btn").forEach(el => {
+        el.addEventListener("click", function() {
+          cs.slides[+this.dataset.index].image = '';
+          rebuildEditor();
+          debouncedSave();
+        });
+      });
+      editor.querySelectorAll(".slide-text").forEach(el => {
+        el.addEventListener("input", function() {
+          cs.slides[+this.dataset.index].text = this.value;
+          debouncedSave();
+        });
+      });
+      editor.querySelectorAll(".slide-delete").forEach(el => {
+        el.addEventListener("click", function() {
+          cs.slides.splice(+this.dataset.index, 1);
+          rebuildEditor();
+          debouncedSave();
+        });
+      });
+      editor.querySelectorAll(".slide-up").forEach(el => {
+        el.addEventListener("click", function() {
+          const i = +this.dataset.index;
+          [cs.slides[i - 1], cs.slides[i]] = [cs.slides[i], cs.slides[i - 1]];
+          rebuildEditor();
+          debouncedSave();
+        });
+      });
+      editor.querySelectorAll(".slide-down").forEach(el => {
+        el.addEventListener("click", function() {
+          const i = +this.dataset.index;
+          [cs.slides[i], cs.slides[i + 1]] = [cs.slides[i + 1], cs.slides[i]];
+          rebuildEditor();
+          debouncedSave();
+        });
+      });
+    }
+
+    bindSlideEvents();
+  }
+
+  // ── Copy ──────────────────────────────────────────────────
+  function renderCopy() {
+    const container = document.getElementById('copy-editor');
+    if (!container) return;
+    container.innerHTML = '';
+
+    (data.paragraphs || []).forEach((text, paraIdx) => {
+      const label = PARAGRAPH_LABELS[paraIdx] || ('Paragraph ' + (paraIdx + 1));
+      const div = document.createElement('div');
+      div.className = 'form-group';
+      const ta = document.createElement('textarea');
+      ta.className = 'form-textarea body copy-para';
+      ta.dataset.index = paraIdx;
+      ta.style.minHeight = '100px';
+      ta.value = text;
+      const lbl = document.createElement('label');
+      lbl.className = 'form-label';
+      lbl.textContent = label;
+      div.appendChild(lbl);
+      div.appendChild(ta);
+
+      const chipsDiv = document.createElement('div');
+      chipsDiv.className = 'para-chips';
+      chipsDiv.dataset.paraIdx = paraIdx;
+      renderParaChips(chipsDiv, paraIdx);
+      div.appendChild(chipsDiv);
+
+      container.appendChild(div);
+
+      ta.addEventListener('input', function () {
+        data.paragraphs[+this.dataset.index] = this.value;
+        renderParaChips(chipsDiv, +this.dataset.index);
+        debouncedSave();
+      });
+    });
+
+    // Token reference
+    const tokenList = document.getElementById('token-list');
+    if (tokenList) {
+      const allIds = [...new Set(Object.keys(data.logoCards).concat(['jordan']))];
+      tokenList.innerHTML = allIds.map(id =>
+        `<code style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:2px 7px;border-radius:3px;font-size:11px;color:rgba(255,255,255,0.6);cursor:pointer;" data-token="${escAttr(id)}">{{${escHtml(id)}}}</code>`
+      ).join('');
+      tokenList.querySelectorAll('[data-token]').forEach(el => {
+        el.addEventListener('click', function () {
+          navigator.clipboard.writeText('{{' + this.dataset.token + '}}').catch(() => {});
+          const orig = this.style.color;
+          this.style.color = '#fff';
+          setTimeout(() => this.style.color = orig, 600);
+        });
+      });
+    }
+  }
+
+  function getTokenPositions(template) {
+    const positions = [];
+    const re = /\{\{([^}]+)\}\}/g;
+    let m;
+    while ((m = re.exec(template)) !== null) {
+      positions.push({ id: m[1], start: m.index, end: m.index + m[0].length });
+    }
+    return positions;
+  }
+
+  function renderParaChips(chipsDiv, paraIdx) {
+    chipsDiv.innerHTML = '';
+    const template = data.paragraphs[paraIdx] || '';
+    const tokens = getTokenPositions(template);
+    let chipDragSrc = null;
+
+    tokens.forEach((tok, chipIdx) => {
+      const chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.draggable = true;
+      chip.innerHTML = escHtml(tok.id) + '<button class="chip-x" title="Remove">×</button>';
+
+      chip.addEventListener('dragstart', e => {
+        chipDragSrc = chipIdx;
+        requestAnimationFrame(() => chip.classList.add('chip-dragging'));
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      chip.addEventListener('dragend', () => {
+        chip.classList.remove('chip-dragging');
+        chipsDiv.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-drag-over'));
+        chipDragSrc = null;
+      });
+      chip.addEventListener('dragover', e => {
+        if (chipDragSrc === chipIdx) return;
+        e.preventDefault();
+        chipsDiv.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-drag-over'));
+        chip.classList.add('chip-drag-over');
+      });
+      chip.addEventListener('dragleave', () => chip.classList.remove('chip-drag-over'));
+      chip.addEventListener('drop', e => {
+        e.preventDefault();
+        chip.classList.remove('chip-drag-over');
+        if (chipDragSrc !== null && chipDragSrc !== chipIdx) moveParaToken(paraIdx, chipDragSrc, chipIdx);
+      });
+
+      chip.querySelector('.chip-x').addEventListener('click', e => {
+        e.stopPropagation();
+        removeParaToken(paraIdx, chipIdx);
+      });
+
+      chipsDiv.appendChild(chip);
+    });
+
+    // "+ Add logo" button with dropdown
+    const addBtn = document.createElement('button');
+    addBtn.className = 'chip-add';
+    addBtn.textContent = '+ Add logo';
+    const dd = document.createElement('div');
+    dd.className = 'chip-dropdown';
+    const allIds = [...new Set(Object.keys(data.logoCards).concat(['jordan']))];
+    allIds.forEach(id => {
+      const opt = document.createElement('div');
+      opt.className = 'chip-opt';
+      opt.textContent = id;
+      opt.addEventListener('mousedown', e => {
+        e.preventDefault();
+        addParaToken(paraIdx, id);
+        dd.classList.remove('open');
+      });
+      dd.appendChild(opt);
+    });
+    addBtn.appendChild(dd);
+    addBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      document.querySelectorAll('.chip-dropdown.open').forEach(d => d.classList.remove('open'));
+      dd.classList.toggle('open');
+    });
+    chipsDiv.appendChild(addBtn);
+  }
+
+  function removeParaToken(paraIdx, chipIdx) {
+    const tokens = getTokenPositions(data.paragraphs[paraIdx] || '');
+    if (!tokens[chipIdx]) return;
+    data.paragraphs[paraIdx] = data.paragraphs[paraIdx].replace('{{' + tokens[chipIdx].id + '}}', '');
+    syncParaUi(paraIdx);
+  }
+
+  function moveParaToken(paraIdx, fromIdx, toIdx) {
+    const template = data.paragraphs[paraIdx] || '';
+    const tokens = getTokenPositions(template);
+    if (fromIdx < 0 || fromIdx >= tokens.length || toIdx < 0 || toIdx >= tokens.length) return;
+
+    // Reorder token ids
+    const ids = tokens.map(t => t.id);
+    const moved = ids.splice(fromIdx, 1)[0];
+    ids.splice(toIdx, 0, moved);
+
+    // Rebuild: replace each token slot with the new id (tracking offset for length changes)
+    let result = template;
+    let offset = 0;
+    tokens.forEach((tp, i) => {
+      const newToken = '{{' + ids[i] + '}}';
+      const oldLen = tp.end - tp.start;
+      result = result.substring(0, tp.start + offset) + newToken + result.substring(tp.end + offset);
+      offset += newToken.length - oldLen;
+    });
+
+    data.paragraphs[paraIdx] = result;
+    syncParaUi(paraIdx);
+  }
+
+  function addParaToken(paraIdx, id) {
+    data.paragraphs[paraIdx] = (data.paragraphs[paraIdx] || '').trimEnd() + ' {{' + id + '}}';
+    syncParaUi(paraIdx);
+  }
+
+  function syncParaUi(paraIdx) {
+    const ta = document.querySelector(`.copy-para[data-index="${paraIdx}"]`);
+    if (ta) ta.value = data.paragraphs[paraIdx] || '';
+    const cd = document.querySelector(`.para-chips[data-para-idx="${paraIdx}"]`);
+    if (cd) renderParaChips(cd, paraIdx);
+    debouncedSave();
+  }
+
+  // ── Logo Cards ────────────────────────────────────────────
+  function renderLogoCards() {
+    const tbody = document.getElementById("lc-tbody");
+    tbody.innerHTML = "";
+    let dragSrcId = null;
+
+    Object.keys(data.logoCards).forEach(id => {
+      const card = data.logoCards[id];
+      const tr = document.createElement("tr");
+      tr.draggable = true;
+      tr.dataset.id = id;
+
+      tr.innerHTML = `
+        <td style="width:20px;padding-right:0;vertical-align:middle;">
+          <span class="lc-drag" title="Drag to reorder">⠿</span>
+        </td>
+        <td class="lc-id-cell" style="min-width:150px;">
+          <span class="lc-id">${escHtml(id)}</span>
+          <input class="form-input" style="margin-top:4px;font-size:10px;font-family:monospace;"
+            data-id="${escAttr(id)}" data-field="logo-file"
+            type="text" value="${escAttr(card.logoFile || '')}" placeholder="logos/name.svg" />
+        </td>
+        <td class="lc-caption-cell">
+          <input class="form-input" data-id="${escAttr(id)}" data-field="caption"
+            type="text" value="${escAttr(card.caption)}" placeholder="Caption" />
+        </td>
+        <td class="lc-link-cell">
+          <input class="form-input" data-id="${escAttr(id)}" data-field="link-text"
+            type="text" value="${escAttr(card.linkText || '')}" placeholder="Link label" style="margin-bottom:5px;" />
+          <input class="form-input" data-id="${escAttr(id)}" data-field="link"
+            type="text" value="${escAttr(card.link || '')}" placeholder="https://" />
+        </td>
+        <td class="lc-color-cell">
+          <div class="color-field">
+            <input class="color-swatch" data-id="${escAttr(id)}" data-field="color-swatch"
+              type="color" value="${escAttr(normalizeColor(card.color))}" title="Pick color" />
+            <input class="form-input color-hex" data-id="${escAttr(id)}" data-field="color-hex"
+              type="text" value="${escAttr(card.color)}" placeholder="#1a1a1a" spellcheck="false" />
+          </div>
+        </td>
+        <td style="width:28px;padding-left:4px;vertical-align:middle;">
+          <button class="lc-del" data-id="${escAttr(id)}" title="Remove">×</button>
+        </td>
+      `;
+
+      tbody.appendChild(tr);
+
+      // Drag events
+      tr.addEventListener('dragstart', e => {
+        dragSrcId = id;
+        requestAnimationFrame(() => tr.classList.add('lc-dragging'));
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      tr.addEventListener('dragend', () => {
+        tr.classList.remove('lc-dragging');
+        tbody.querySelectorAll('tr').forEach(r => r.classList.remove('lc-drag-over'));
+        dragSrcId = null;
+      });
+      tr.addEventListener('dragover', e => {
+        if (dragSrcId === id) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        tbody.querySelectorAll('tr').forEach(r => r.classList.remove('lc-drag-over'));
+        tr.classList.add('lc-drag-over');
+      });
+      tr.addEventListener('dragleave', () => tr.classList.remove('lc-drag-over'));
+      tr.addEventListener('drop', e => {
+        e.preventDefault();
+        tr.classList.remove('lc-drag-over');
+        if (dragSrcId && dragSrcId !== id) reorderLogoCard(dragSrcId, id);
+      });
+    });
+
+    // Bind field events
+    function bindField(selector, field, setter) {
+      tbody.querySelectorAll(selector).forEach(input => {
+        input.addEventListener("input", function () {
+          setter(this.dataset.id, this.value);
+          debouncedSave();
+        });
+      });
+    }
+    bindField("[data-field='logo-file']", 'logoFile', (id, v) => { data.logoCards[id].logoFile = v; });
+    bindField("[data-field='caption']",   'caption',  (id, v) => { data.logoCards[id].caption  = v; });
+    bindField("[data-field='link-text']", 'linkText', (id, v) => { data.logoCards[id].linkText  = v; });
+    bindField("[data-field='link']",      'link',     (id, v) => { data.logoCards[id].link      = v; });
+
+    tbody.querySelectorAll("[data-field='color-swatch']").forEach(input => {
+      input.addEventListener("input", function () {
+        const id = this.dataset.id; const hex = this.value;
+        data.logoCards[id].color = hex;
+        this.closest("tr").querySelector("[data-field='color-hex']").value = hex;
+        debouncedSave();
+      });
+    });
+    tbody.querySelectorAll("[data-field='color-hex']").forEach(input => {
+      input.addEventListener("input", function () {
+        const id = this.dataset.id; const val = this.value.trim();
+        data.logoCards[id].color = val;
+        if (/^#[0-9a-fA-F]{3,8}$/.test(val)) {
+          const sw = this.closest("tr").querySelector("[data-field='color-swatch']");
+          sw.value = val.length === 7 ? val : normalizeColor(val);
+        }
+        debouncedSave();
+      });
+    });
+
+    tbody.querySelectorAll(".lc-del").forEach(btn => {
+      btn.addEventListener("click", function () {
+        const id = this.dataset.id;
+        if (!confirm('Remove logo card "' + id + '"? This won\'t remove {{' + id + '}} tokens from paragraph templates.')) return;
+        delete data.logoCards[id];
+        debouncedSave();
+        renderLogoCards();
+      });
+    });
+  }
+
+  function reorderLogoCard(fromId, toId) {
+    const keys = Object.keys(data.logoCards);
+    const fi = keys.indexOf(fromId), ti = keys.indexOf(toId);
+    if (fi === -1 || ti === -1 || fi === ti) return;
+    keys.splice(fi, 1);
+    keys.splice(ti, 0, fromId);
+    const reordered = {};
+    keys.forEach(k => { reordered[k] = data.logoCards[k]; });
+    data.logoCards = reordered;
+    debouncedSave();
+    renderLogoCards();
+  }
+
+  // ── Helpers ───────────────────────────────────────────────
+  function escHtml(str) {
+    return (str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function escAttr(str) {
+    return (str || "").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
+  // Normalize color to full 6-digit hex for color input (which requires #rrggbb)
+  function normalizeColor(color) {
+    if (!color) return "#1a1a1a";
+    const s = color.trim();
+    // Already 7-char hex
+    if (/^#[0-9a-fA-F]{6}$/.test(s)) return s;
+    // 4-char shorthand
+    if (/^#[0-9a-fA-F]{3}$/.test(s)) {
+      return "#" + s[1] + s[1] + s[2] + s[2] + s[3] + s[3];
+    }
+    return "#1a1a1a";
+  }
+
+  // ── Nav ───────────────────────────────────────────────────
+  function switchSection(name) {
+    activeSection = name;
+    document.querySelectorAll(".nav-item").forEach(el => {
+      el.classList.toggle("active", el.dataset.section === name);
+    });
+    document.querySelectorAll(".section").forEach(el => {
+      el.classList.toggle("active", el.id === "section-" + name);
+    });
+  }
+
+  // ── Wire up UI ────────────────────────────────────────────
+  function bindUI() {
+    // Nav items
+    document.querySelectorAll(".nav-item").forEach(el => {
+      el.addEventListener("click", () => switchSection(el.dataset.section));
+    });
+
+    // Refresh + Publish
+    document.getElementById("btn-refresh").addEventListener("click", () => {
+      void refreshFromServer();
+    });
+    document.getElementById("btn-publish").addEventListener("click", () => {
+      void publishNow();
+    });
+
+    // Export
+    document.getElementById("btn-export").addEventListener("click", exportJSON);
+
+    // Import button triggers file input
+    document.getElementById("btn-import").addEventListener("click", () => {
+      document.getElementById("import-file").value = "";
+      document.getElementById("import-file").click();
+    });
+
+    // File input change
+    document.getElementById("import-file").addEventListener("change", function () {
+      if (this.files && this.files[0]) {
+        importJSON(this.files[0]);
+      }
+    });
+
+    mediaUploadInput.addEventListener('change', async function () {
+      const files = Array.from(this.files || []);
+      if (!files.length) return;
+
+      let uploaded = 0;
+
+      for (const file of files) {
+        try {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('folder', 'media');
+
+          const res = await fetch(apiUrl('/api/cms/upload'), {
+            method: 'POST',
+            body: formData
+          });
+
+          const payload = await res.json();
+          if (!res.ok) throw new Error(payload?.error || 'Upload failed');
+
+          mediaFiles = normalizeAssets(payload.assets || []);
+          uploaded += 1;
+        } catch (e) {
+          showToast(`Upload failed for ${file.name}: ${e?.message || e}`);
+        }
+      }
+
+      renderMediaGrid();
+      if (uploaded > 0) {
+        showToast(`Uploaded ${uploaded} file${uploaded === 1 ? '' : 's'}`);
+      }
+    });
+
+    // Media modal
+    document.getElementById("btn-scan-folder").addEventListener("click", () => { void scanMediaFolder(); });
+    document.getElementById("btn-close-media").addEventListener("click", closeMediaPicker);
+    document.getElementById("media-modal").addEventListener("click", function(e) {
+      if (e.target === this) closeMediaPicker();
+    });
+
+    // Add logo card
+    document.getElementById("btn-add-logo").addEventListener("click", () => {
+      document.getElementById("lc-add-form").style.display = '';
+      document.getElementById("lc-new-id").focus();
+    });
+    document.getElementById("lc-new-cancel").addEventListener("click", () => {
+      document.getElementById("lc-add-form").style.display = 'none';
+    });
+    document.getElementById("lc-new-confirm").addEventListener("click", () => {
+      const id = document.getElementById("lc-new-id").value.trim().toLowerCase().replace(/\s+/g, '-');
+      if (!id) { showToast("Enter an ID for the logo"); return; }
+      if (data.logoCards[id]) { showToast('"' + id + '" already exists'); return; }
+      data.logoCards[id] = {
+        caption:  document.getElementById("lc-new-caption").value.trim(),
+        color:    document.getElementById("lc-new-color").value.trim() || '#1a1a1a',
+        link:     '',
+        linkText: '',
+        logoFile: document.getElementById("lc-new-file").value.trim()
+      };
+      debouncedSave();
+      renderLogoCards();
+      ['lc-new-id','lc-new-file','lc-new-caption'].forEach(x => document.getElementById(x).value = '');
+      document.getElementById("lc-new-color").value = '#1a1a1a';
+      document.getElementById("lc-new-swatch").value = '#1a1a1a';
+      document.getElementById("lc-add-form").style.display = 'none';
+      showToast('Added "' + id + '"');
+    });
+    document.getElementById("lc-new-id").addEventListener("keydown", e => { if (e.key === "Enter") document.getElementById("lc-new-confirm").click(); });
+    document.getElementById("lc-new-swatch").addEventListener("input", function () { document.getElementById("lc-new-color").value = this.value; });
+    document.getElementById("lc-new-color").addEventListener("input", function () {
+      if (/^#[0-9a-fA-F]{6}$/.test(this.value.trim())) document.getElementById("lc-new-swatch").value = this.value.trim();
+    });
+
+    // Close chip dropdowns on outside click
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.chip-dropdown.open').forEach(d => d.classList.remove('open'));
+    });
+  }
+
+  // ── Init ──────────────────────────────────────────────────
+  async function init() {
+    await loadData();
+    bindUI();
+    renderAll();
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
