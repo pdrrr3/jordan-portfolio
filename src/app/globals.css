@@ -364,7 +364,7 @@ body {
   color: rgba(255, 255, 255, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 2px;
-  padding: 6px 7px 5px;
+  padding: 6px 7px 4px;
   white-space: nowrap;
 }
 
@@ -425,6 +425,7 @@ body {
 }
 
 .casestudy-slide-image {
+  position: relative;
   flex: 0 0 260px;
   height: 260px;
   align-self: flex-start;
@@ -443,6 +444,33 @@ body {
   object-position: center;
   border: none;
   outline: none;
+}
+
+.cs-mute-toggle {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.casestudy-slide-image:hover .cs-mute-toggle {
+  opacity: 1;
+}
+
+.cs-mute-toggle:hover {
+  background: rgba(0, 0, 0, 0.75);
 }
 
 .casestudy-slide-right {
