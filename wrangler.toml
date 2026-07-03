@@ -1,0 +1,17 @@
+name = "jordan-portfolio-cms-hook"
+main = "cloudflare/cms-hook-worker.ts"
+compatibility_date = "2026-04-16"
+account_id = "23f08ec7491a8e6a453bd59df5d99999"
+workers_dev = true
+
+[vars]
+HOOK_MODE = "relay"
+
+[[d1_databases]]
+binding = "CMS_DB"
+database_name = "jordan-portfolio-cms"
+database_id = "32187d64-f643-4bd1-ac56-fd6ffa03cb72"
+
+[[r2_buckets]]
+binding = "CMS_MEDIA"
+bucket_name = "jordan-portfolio-media"

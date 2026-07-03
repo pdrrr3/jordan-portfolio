@@ -667,6 +667,7 @@ body {
 }
 
 .logo img {
+  width: auto;
   height: 22px;
   object-fit: contain;
 }
